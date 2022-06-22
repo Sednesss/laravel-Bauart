@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\User;
 
 return new class extends Migration
 {
@@ -16,8 +17,8 @@ return new class extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->integer('user_id');
-            $table->integer('storage_id');
+            $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('storage_id')->unsigned();
 
             $table->string('name');
             $table->string('path_origin');
