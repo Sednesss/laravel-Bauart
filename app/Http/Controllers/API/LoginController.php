@@ -2,35 +2,39 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Models\User;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\API\LoginRequest;
+use App\Http\Resources\API\ErrorResource;
+use App\Http\Resources\API\UserResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class LoginController extends BaseController
+class LoginController extends Controller
 {
-    public function login(Request $request): JsonResponse
+    /**
+     * @param LoginRequest $request
+     * @return ErrorResource|UserResource
+     */
+    public function login(LoginRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
-
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
-        }
+        $request->validated();
 
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            // Аутентификация успешна...
             $user = Auth::user();
-            $success['token'] =  "Bearer " . $user->createToken('MyApp')->accessToken->token;
-            $success['name'] =  $user->name;
+            $success['email'] = $user->email;
+            $success['token'] = "Bearer " . $user->createToken('MyApp')->accessToken->token;
+            $success['message'] = 'User authenticate successfully.';
 
-            return $this->sendResponse($success, 'User authenticate successfully.');
+            return new UserResource($success);
         }
-        return $this->sendError('Authenticate Error.', $validator->errors());
+
+        $error['error'] = ['Invalid authorization data.'];
+        $error['message'] = 'Authenticate Error.';
+
+        return new ErrorResource($error);
     }
 }
