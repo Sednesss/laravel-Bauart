@@ -2,37 +2,43 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\API\RegisterRequest;
+use App\Http\Resources\API\ErrorResource;
+use App\Http\Resources\API\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class RegisterController extends BaseController
+class RegisterController extends Controller
 {
     /**
      * Register api
      *
-     * @return JsonResponse
+     * @return ErrorResource|UserResource
      */
-    public function register(Request $request): JsonResponse
+    public function register(RegisterRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required',
-            'c_password' => 'required|same:password',
-        ]);
+        $request->validated();
 
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::validate($credentials)) {
+            $error['error'] = ['The user with this email is already registered'];
+            $error['message'] = 'Registration error.';
+            return new ErrorResource($error);
         }
 
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
-        $success['token'] =  "Bearer " . $user->createToken('MyApp')->accessToken->token;
-        $success['name'] =  $user->name;
 
-        return $this->sendResponse($success, 'User register successfully.');
+        $success['email'] = $user->email;
+        $success['token'] = "Bearer " . $user->createToken('MyApp')->accessToken->token;
+        $success['message'] = 'User register successfully.';
+
+        return new UserResource($success);
     }
 }
