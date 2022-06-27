@@ -36,7 +36,7 @@ class RegisterController extends Controller
         $user = User::create($input);
 
         $success['email'] = $user->email;
-        $success['token'] = "Bearer " . $user->createToken('MyApp')->accessToken->token;
+        $success['token'] = $user->createToken('MyApp')->accessToken;
         $success['message'] = 'User register successfully.';
 
         return new UserResource($success);

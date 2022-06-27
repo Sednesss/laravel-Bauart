@@ -21,6 +21,7 @@ class UserResource extends JsonResource
             'message' => $this['message'],
             'user' => [
                 'email' => $this['email'],
+                'token-type' => 'Bearer',
                 'token' => $this['token'],
             ],
         ];

@@ -26,7 +26,7 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $success['email'] = $user->email;
-            $success['token'] = "Bearer " . $user->createToken('MyApp')->accessToken->token;
+            $success['token'] = $user->createToken('MyApp')->accessToken;
             $success['message'] = 'User authenticate successfully.';
 
             return new UserResource($success);
