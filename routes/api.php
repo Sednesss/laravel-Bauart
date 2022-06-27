@@ -21,3 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('register', 'App\Http\Controllers\API\RegisterController@register')->name('register');
 Route::post('login', 'App\Http\Controllers\API\LoginController@login')->name('login');
 
+Route::middleware('auth:api')->group(function () {
+    Route::post('image/loading', 'App\Http\Controllers\API\LoadingImageController@loading')->name('image.loading');
+});
