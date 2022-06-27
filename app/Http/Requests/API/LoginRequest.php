@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\API;
 
-use App\Http\Resources\API\ErrorResource;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LoginRequest extends FormRequest

@@ -7,10 +7,7 @@ use App\Http\Requests\API\RegisterRequest;
 use App\Http\Resources\API\ErrorResource;
 use App\Http\Resources\API\UserResource;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
