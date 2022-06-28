@@ -19,7 +19,9 @@ class ImageResource extends JsonResource
             'success' => true,
             'message' => $this['message'],
             'image' => [
-                'data' => $this['data'],
+                'name' => $this['name'],
+                'path' => $this['path'],
+                'loading_time' => $this['date'],
             ],
         ];
     }

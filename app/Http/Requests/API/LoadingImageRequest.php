@@ -24,7 +24,7 @@ class LoadingImageRequest extends FormRequest
     public function rules()
     {
         return [
-            'data' => 'required',
+            'image' => ['required', 'image'],
         ];
     }
 }
