@@ -23,6 +23,7 @@ class ImageResource extends JsonResource
                 'path' => $this['path'],
                 'loading_time' => $this['date'],
             ],
+            'response_api' => $this['response_api']
         ];
     }
 }

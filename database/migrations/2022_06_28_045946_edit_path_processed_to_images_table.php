@@ -13,7 +13,7 @@ return new class extends Migration {
     public function up()
     {
         Schema::table('images', function (Blueprint $table) {
-            $table->string('path_processed')->nullable()->change();
+            $table->string('path_processed')->nullable(true)->change();
         });
     }
 
@@ -25,7 +25,7 @@ return new class extends Migration {
     public function down()
     {
         Schema::table('images', function (Blueprint $table) {
-            $table->string('path_processed')->change();
+            $table->string('path_processed')->nullable(false)->change();
         });
     }
 };
