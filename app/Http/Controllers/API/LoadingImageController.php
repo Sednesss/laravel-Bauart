@@ -14,7 +14,7 @@ class LoadingImageController extends Controller
         $request->validated();
 
         $temp_image = $request['image'];
-        dd($temp_image);
+
         $path_upload = $temp_image->store(config('imagestorage.disks.local.storage_path'), 'public');
 
         $input = [
