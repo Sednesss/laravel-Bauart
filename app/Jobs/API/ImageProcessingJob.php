@@ -8,8 +8,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Ixudra\Curl\Facades\Curl;
 
-class ImageProcessing implements ShouldQueue
+class ImageProcessingJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -32,6 +33,11 @@ class ImageProcessing implements ShouldQueue
      */
     public function handle()
     {
-        //add use api processing image
+        //$absolut_path_file = storage_path('app\public') . '/' . $path_upload;
+//        $response = Curl::to('https://api.removal.ai/3.0/remove')
+//            ->withFile('image_file', $absolut_path_file, 'image/png', $image_name)
+//            ->withHeader('Rm-Token: 62bbf39244d1c5.14406167')
+//            ->post();
+
     }
 }

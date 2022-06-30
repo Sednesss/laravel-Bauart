@@ -21,7 +21,6 @@ class ImageResource extends JsonResource
             'image' => [
                 'name' => $this['name'],
                 'path' => $this['path'],
-                'loading_time' => $this['date'],
             ],
             'response_api' => $this['response_api']
         ];

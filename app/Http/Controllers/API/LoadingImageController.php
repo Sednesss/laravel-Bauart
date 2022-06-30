@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\LoadingImageRequest;
 use App\Http\Resources\API\ImageResource;
+use App\Jobs\API\ImageStoreJob;
 use App\Models\ImageProcessing\Image;
 use Illuminate\Support\Facades\Storage;
 use Ixudra\Curl\Facades\Curl;
@@ -18,28 +19,22 @@ class LoadingImageController extends Controller
         $temp_image = $request['image'];
         $image_name = $temp_image->getClientOriginalName();
 
-        $path_upload = $temp_image->store(config('imagestorage.disks.local.storage_path'), 'public');
+        //job store
+        //$this->dispatch(New ImageStoreJob($temp_image, $request->user()));
 
-        $input = [
-            'user_id' => $request->user()->id,
-            'storage_id' => 1,
-            'name' => $temp_image->getClientOriginalName(),
-            'path_origin' => $path_upload,
-        ];
-
-        $image = Image::create($input);
+        //store
+        //$path_upload = $temp_image->store(config('imagestorage.disks.local.storage_path'), 'public');
 
         //removal.ai api
-        $absolut_path_file = storage_path('app\public') . '/' . $path_upload;
-        $response = Curl::to('https://api.removal.ai/3.0/remove')
-            ->withFile('image_file', $absolut_path_file, 'image/png', $image_name)
-            ->withHeader('Rm-Token: 62bbf39244d1c5.14406167')
+        //$absolut_path_file = storage_path('app\public') . '/' . $path_upload;
+        $response = Curl::to('https://apis.clipdrop.co/remove-background/v1')
+            ->withFile('image_file', 'C:\openserver\domains\laravel-Bauart\laravel-logo-big.png', 'image/png', $image_name)
+            ->withHeader('x-api-key: 45365de2fb4d49c0faf46f31d0471cf0505b20b2aacb055e1e442728ff543227c03467db4b21905ce3b05f747fc13a6c')
             ->post();
-
+        dd($response);
         $success = [
-            'name' => $temp_image->getClientOriginalName(),
+            'name' => $image_name,
             'path' => $path_upload,
-            'date' => $image['created_at'],
             'message' => 'Image loading successfully.',
             'response_api' => $response,
         ];

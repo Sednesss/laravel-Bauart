@@ -11,7 +11,7 @@ class Image extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'storage_id', 'name', 'path_origin', 'path_origin'];
+    protected $fillable = ['user_id', 'storage_id', 'images_stack_id', 'name', 'path_origin', 'path_origin'];
 
     public function user()
     {
@@ -21,5 +21,10 @@ class Image extends Model
     public function storage()
     {
         return $this->belongsTo(Storage::class);
+    }
+
+    public function images_stack()
+    {
+        return $this->belongsTo(ImagesStack::class);
     }
 }
