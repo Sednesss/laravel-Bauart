@@ -19,24 +19,13 @@ class LoadingImageController extends Controller
         $temp_image = $request['image'];
         $image_name = $temp_image->getClientOriginalName();
 
+        //dd($request->image);
         //job store
-        //$this->dispatch(New ImageStoreJob($temp_image, $request->user()));
+        $this->dispatch(New ImageStoreJob($request, $request->user()->id));
 
-        //store
-        //$path_upload = $temp_image->store(config('imagestorage.disks.local.storage_path'), 'public');
-
-        //removal.ai api
-        //$absolut_path_file = storage_path('app\public') . '/' . $path_upload;
-        $response = Curl::to('https://apis.clipdrop.co/remove-background/v1')
-            ->withFile('image_file', 'C:\openserver\domains\laravel-Bauart\laravel-logo-big.png', 'image/png', $image_name)
-            ->withHeader('x-api-key: 45365de2fb4d49c0faf46f31d0471cf0505b20b2aacb055e1e442728ff543227c03467db4b21905ce3b05f747fc13a6c')
-            ->post();
-        dd($response);
         $success = [
             'name' => $image_name,
-            'path' => $path_upload,
             'message' => 'Image loading successfully.',
-            'response_api' => $response,
         ];
 
         return new ImageResource($success);

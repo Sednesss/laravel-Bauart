@@ -15,17 +15,17 @@ class ImageStoreJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $temp_image;
-    protected $user;
+    protected $user_id;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($temp_image, $user)
+    public function __construct($path_temp_image, $user_id)
     {
-        $this->temp_image = $temp_image;
-        $this->user = $user;
+        $this->temp_image = $path_temp_image;
+        $this->user_id = $user_id;
     }
 
     /**
@@ -38,12 +38,14 @@ class ImageStoreJob implements ShouldQueue
         $path_upload = $this->temp_image->store(config('imagestorage.disks.local.storage_path'), 'public');
 
         $input = [
-            'user_id' => $this->user->id,
+            'user_id' => $this->user_id,
             'storage_id' => 1,
             'name' => $this->temp_image,
             'path_origin' => $path_upload,
         ];
 
         $image = Image::create($input);
+
+        //add job store
     }
 }

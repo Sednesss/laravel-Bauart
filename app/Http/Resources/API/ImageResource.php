@@ -20,9 +20,7 @@ class ImageResource extends JsonResource
             'message' => $this['message'],
             'image' => [
                 'name' => $this['name'],
-                'path' => $this['path'],
             ],
-            'response_api' => $this['response_api']
         ];
     }
 }
