@@ -22,9 +22,9 @@ class ImageStoreJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($path_temp_image, $user_id)
+    public function __construct($temp_image, $user_id)
     {
-        $this->temp_image = $path_temp_image;
+        $this->temp_image = $temp_image;
         $this->user_id = $user_id;
     }
 

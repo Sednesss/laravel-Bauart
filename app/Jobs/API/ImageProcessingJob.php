@@ -14,16 +14,18 @@ class ImageProcessingJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $image;
+    protected $path_upload;
+    protected $image_name;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($image)
+    public function __construct($path_upload, $image_name)
     {
-        $this->image = $image;
+        $this->path_upload = $path_upload;
+        $this->image_name = $image_name;
     }
 
     /**
@@ -33,18 +35,11 @@ class ImageProcessingJob implements ShouldQueue
      */
     public function handle()
     {
-        //$absolut_path_file = storage_path('app\public') . '/' . $path_upload;
-//        $response = Curl::to('https://api.removal.ai/3.0/remove')
-//            ->withFile('image_file', $absolut_path_file, 'image/png', $image_name)
-//            ->withHeader('Rm-Token: 62bbf39244d1c5.14406167')
-//            ->post();
-
         //removal.ai api
-        //$absolut_path_file = storage_path('app\public') . '/' . $path_upload;
-//        $response = Curl::to('https://apis.clipdrop.co/remove-background/v1')
-//            ->withFile('image_file', 'C:\openserver\domains\laravel-Bauart\laravel-logo-big.png', 'image/png', $image_name)
-//            ->withHeader('x-api-key: 45365de2fb4d49c0faf46f31d0471cf0505b20b2aacb055e1e442728ff543227c03467db4b21905ce3b05f747fc13a6c')
-//            ->post();
-//        dd($response);
+        $absolut_path_file = storage_path('app\public') . '/' . $this->path_upload;
+        $response = Curl::to('https://apis.clipdrop.co/remove-background/v1')
+            ->withFile('image_file', $absolut_path_file, 'image/png', $this->image_name)
+            ->withHeader('x-api-key: 45365de2fb4d49c0faf46f31d0471cf0505b20b2aacb055e1e442728ff543227c03467db4b21905ce3b05f747fc13a6c')
+            ->post();
     }
 }

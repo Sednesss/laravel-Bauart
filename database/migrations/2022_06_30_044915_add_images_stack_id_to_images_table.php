@@ -14,10 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::table('images', function (Blueprint $table) {
-            $table->bigInteger('images_stack_id')->unsigned();
+            $table->bigInteger('images_stack_id')->unsigned()->after('storage_id');
             $table->foreign('images_stack_id')->references('id')->on('images_stacks');
 
-            $table->string('status')->nullable(true);
+            $table->string('status')->nullable(true)->after('name');
         });
     }
 

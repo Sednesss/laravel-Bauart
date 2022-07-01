@@ -5,7 +5,8 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'storage_path' => 'image/uploads',
+            'storage_path_upload' => 'image/uploads',
+            'storage_path_processed' => 'image/processed',
         ],
 
         's3' => [
