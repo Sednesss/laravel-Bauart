@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\LoadingImageRequest;
 use App\Http\Resources\API\ImageResource;
-use App\Jobs\API\ImageStoreJob;
+use App\Jobs\API\ImageProcessingJob;
 use App\Models\ImageProcessing\Image;
 use App\Models\ImageProcessing\ImagesStack;
 use Illuminate\Support\Facades\Storage;
@@ -17,46 +17,37 @@ class LoadingImageController extends Controller
     {
         $request->validated();
 
-        $temp_image = $request['image'];
-        $image_name = $temp_image->getClientOriginalName();
-        //job store
-        //$this->dispatch(New ImageStoreJob($request, $request->user()->id));
-
         $input_image_stack = [
             'user_id' => $request->user()->id
         ];
         $images_stack = ImagesStack::create($input_image_stack);
 
-        $path_upload = $temp_image->store(config('imagestorage.disks.local.storage_path_upload'), 'public');
-        $input_image = [
-            'user_id' => $request->user()->id,
-            'storage_id' => 1,
-            'images_stack_id' => $images_stack->id,
-            'name' => $image_name,
-            'path_origin' => $path_upload,
-        ];
-        $image = Image::create($input_image);
+        $images_name = [];
 
-        //add job processing
-        $absolut_path_file = storage_path('app\public') . '/' . $path_upload;
-        $response = Curl::to('https://apis.clipdrop.co/remove-background/v1')
-            ->withFile('image_file', $absolut_path_file, 'image/png', $image_name)
-            ->withHeader('x-api-key: 45365de2fb4d49c0faf46f31d0471cf0505b20b2aacb055e1e442728ff543227c03467db4b21905ce3b05f747fc13a6c')
-            ->post();
+        $temp_images = $request['images'];
+        foreach ($temp_images as $key => $temp_image) {
+            $image_name = $temp_image->getClientOriginalName();
+            $path_upload = $temp_image->store(config('imagestorage.disks.local.storage_path_upload'), 'public');
 
-        $path_processed = config('imagestorage.disks.local.storage_path_processed');
-        Storage::disk('public')
-            ->put(config('imagestorage.disks.local.storage_path_processed') . '/' . basename($path_upload), $response);
-        $image->images_stack_id = $images_stack->id;
-        $image->path_processed = $path_processed;
+            $input_image = [
+                'user_id' => $request->user()->id,
+                'storage_id' => 1,
+                'images_stack_id' => $images_stack->id,
+                'name' => $image_name,
+                'path_origin' => $path_upload,
+            ];
+            $image = Image::create($input_image);
 
-        $image->save();
+            $images_name[] = ['image_name' => $image_name];
+        }
+
+        //Job processing images (stack_id)
+        dispatch(new ImageProcessingJob($images_stack->id));
 
         $success = [
-            'name' => $image_name,
+            'names_images' => array_column($images_name, 'image_name'),
             'message' => 'Image loading successfully.',
         ];
-
         return new ImageResource($success);
     }
 }

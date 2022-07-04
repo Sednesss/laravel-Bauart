@@ -18,9 +18,7 @@ class ImageResource extends JsonResource
         return [
             'success' => true,
             'message' => $this['message'],
-            'image' => [
-                'name' => $this['name'],
-            ],
+            'images' => $this['names_images'],
         ];
     }
 }

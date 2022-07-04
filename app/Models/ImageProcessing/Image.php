@@ -10,7 +10,7 @@ class Image extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'storage_id', 'images_stack_id', 'name', 'path_origin'];
+    protected $fillable = ['user_id', 'storage_id', 'images_stack_id', 'name', 'status', 'path_origin'];
 
     public function user()
     {
