@@ -2,7 +2,8 @@
 
 namespace App\Jobs\API;
 
-use App\Helpers\API\AccessingAPIInterface;
+use App\Helpers\API\ClipdropAPI;
+use App\Helpers\API\RemovalAiAPI;
 use App\Models\ImageProcessing\Image;
 use App\Models\ImageProcessing\ImagesStack;
 use Illuminate\Bus\Queueable;
@@ -14,7 +15,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
 use Ixudra\Curl\Facades\Curl;
 
-class ImageProcessingJob implements ShouldQueue, AccessingAPIInterface
+class ImageProcessingJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -37,33 +38,41 @@ class ImageProcessingJob implements ShouldQueue, AccessingAPIInterface
      */
     public function handle()
     {
+        $success_processing_stack = true;
         foreach (Image::where('images_stack_id', $this->images_stack_id)->cursor() as $image) {
-            $absolut_path_file = storage_path('app\public') . '/'
+            $path_to_loading = storage_path('app\public') . '/'
+                . config('imagestorage.disks.local.storage_path_upload') . '/' . basename($image->path_origin);
+            $path_to_saving = storage_path('app\public') . '/'
                 . config('imagestorage.disks.local.storage_path_processed') . '/' . basename($image->path_origin);
 
-            $response = $this->requestAPI('post', 'https://apis.clipdrop.co/remove-background/v1',
+            $clipdrop = new ClipdropAPI();
+            $response = $clipdrop->removeBackground('https://apis.clipdrop.co/remove-background/v1',
                 ['api_key' => '45365de2fb4d49c0faf46f31d0471cf0505b20b2aacb055e1e442728ff543227c03467db4b21905ce3b05f747fc13a6c'],
-                ['absolut_path_file' => $absolut_path_file, 'image_name' => $image->name]);
+                ['image_name' => $image->name],
+                ['path_to_loading' => $path_to_loading, 'path_to_saving' => $path_to_saving]);
+            dd($response);
 
-            $path_processed = config('imagestorage.disks.local.storage_path_processed') . '/' . basename($image->path_origin);
-            Storage::disk('public')->put($path_processed, $response);
+//            $remove_ai = new RemovalAiAPI();
+//            $response = $remove_ai->removeBackground('https://api.removal.ai/3.0/remove',
+//                ['api_key' => '62c3cd16c9bcd1.96017935'],
+//                ['absolut_path_file' => $absolut_path_file, 'image_name' => $image->name, 'get_file' => 1]);
 
-            $image->path_processed = $path_processed;
-            //$image->status = '124';
-            $image->save();
 
-            //$images_stack = ImagesStack::find($this->images_stack_id);
-            //$images_stack->status = 'ddd';
-            //$images_stack->save();
+//            $image->path_processed = $path_processed;
+//            if ($response_status == 200 or $response->status == 0) {
+//                $image->status = 'success';
+//            } else {
+//                $image->status = 'failed: ' . $response_status;
+//            }
+//            $image->save();
         }
-    }
 
-    public function requestAPI($method, $url, $header_params, $body_params)
-    {
-        //apis.clipdrop.co
-        return Curl::to($url)
-            ->withFile('image_file', $body_params['absolut_path_file'], 'image/png', $body_params['image_name'])
-            ->withHeader("x-api-key: $header_params[api_key]")
-            ->post();
+        $images_stack = ImagesStack::find($this->images_stack_id);
+        if ($success_processing_stack) {
+            $images_stack->status = 'success';
+        } else {
+            $images_stack->status = 'failed';
+        }
+        $images_stack->save();
     }
 }
