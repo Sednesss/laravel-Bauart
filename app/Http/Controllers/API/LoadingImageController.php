@@ -8,8 +8,6 @@ use App\Http\Resources\API\ImageResource;
 use App\Jobs\API\ImageProcessingJob;
 use App\Models\ImageProcessing\Image;
 use App\Models\ImageProcessing\ImagesStack;
-use Illuminate\Support\Facades\Storage;
-use Ixudra\Curl\Facades\Curl;
 
 class LoadingImageController extends Controller
 {
@@ -46,7 +44,7 @@ class LoadingImageController extends Controller
 
         $success = [
             'names_images' => array_column($images_name, 'image_name'),
-            'message' => 'Image loading successfully.',
+            'message' => 'Images loading successfully.',
         ];
         return new ImageResource($success);
     }

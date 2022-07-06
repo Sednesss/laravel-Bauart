@@ -23,4 +23,6 @@ Route::post('login', 'App\Http\Controllers\API\LoginController@login')->name('lo
 
 Route::middleware('auth:api')->group(function () {
     Route::post('image/loading', 'App\Http\Controllers\API\LoadingImageController@loading')->name('image.loading');
+    Route::post('image/downloading', 'App\Http\Controllers\API\DownloadingImageController@downloading')
+        ->name('image.downloading');
 });
