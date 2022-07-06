@@ -4,5 +4,5 @@ namespace App\Helpers\API;
 
 interface ImageProcessingAPIInterface
 {
-    function removeBackground($url, $header_params, $body_params, $params_saving_loading);
+    function removeBackground($header_params, $body_params, $params_saving_loading);
 }

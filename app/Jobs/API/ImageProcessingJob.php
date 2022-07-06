@@ -42,29 +42,29 @@ class ImageProcessingJob implements ShouldQueue
         foreach (Image::where('images_stack_id', $this->images_stack_id)->cursor() as $image) {
             $path_to_loading = storage_path('app\public') . '/'
                 . config('imagestorage.disks.local.storage_path_upload') . '/' . basename($image->path_origin);
-            $path_to_saving = storage_path('app\public') . '/'
-                . config('imagestorage.disks.local.storage_path_processed') . '/' . basename($image->path_origin);
+            $path_processed = config('imagestorage.disks.local.storage_path_processed') . '/' . basename($image->path_origin);
 
-            $clipdrop = new ClipdropAPI();
-            $response = $clipdrop->removeBackground('https://apis.clipdrop.co/remove-background/v1',
-                ['api_key' => '45365de2fb4d49c0faf46f31d0471cf0505b20b2aacb055e1e442728ff543227c03467db4b21905ce3b05f747fc13a6c'],
+            $clipdrop = new ClipdropAPI(config('imagesprocessing.api.clipdrop.api_key'));
+            $response = $clipdrop->removeBackground(
+                [],
                 ['image_name' => $image->name],
-                ['path_to_loading' => $path_to_loading, 'path_to_saving' => $path_to_saving]);
-            dd($response);
+                ['path_to_loading' => $path_to_loading]);
 
-//            $remove_ai = new RemovalAiAPI();
-//            $response = $remove_ai->removeBackground('https://api.removal.ai/3.0/remove',
-//                ['api_key' => '62c3cd16c9bcd1.96017935'],
-//                ['absolut_path_file' => $absolut_path_file, 'image_name' => $image->name, 'get_file' => 1]);
+//            $remove_ai = new RemovalAiAPI(config('imagesprocessing.api.removalai.api_key'));
+//            $response = $remove_ai->removeBackground(
+//                [],
+//                ['image_name' => $image->name, 'get_file' => 1],
+//                ['path_to_loading' => $path_to_loading]);
 
-
-//            $image->path_processed = $path_processed;
-//            if ($response_status == 200 or $response->status == 0) {
-//                $image->status = 'success';
-//            } else {
-//                $image->status = 'failed: ' . $response_status;
-//            }
-//            $image->save();
+            $image->path_processed = $path_processed;
+            if ($response->status == 200 or $response->status == 0) {
+                $image->status = 'success';
+                Storage::disk('public')->put($path_processed, $response->content);
+            } else {
+                $image->status = 'failed: ' . $response->status;
+                $success_processing_stack = false;
+            }
+            $image->save();
         }
 
         $images_stack = ImagesStack::find($this->images_stack_id);

@@ -6,13 +6,20 @@ use Ixudra\Curl\Facades\Curl;
 
 class ClipdropAPI implements ImageProcessingAPIInterface
 {
-    public function removeBackground($url, $header_params, $body_params, $params_saving_loading)
+    private string $url_remove_background = 'https://apis.clipdrop.co/remove-background/v1';
+    private string $api_key;
+
+    public function __construct($api_key)
     {
-        return Curl::to($url)
+        $this->api_key = $api_key;
+    }
+
+    public function removeBackground($header_params, $body_params, $params_saving_loading)
+    {
+        return Curl::to($this->url_remove_background)
             ->withFile('image_file', $params_saving_loading['path_to_loading'], 'image/png', $body_params['image_name'])
-            ->withHeader("x-api-key: $header_params[api_key]")
-            //->withContentType('image/png')
-            ->download($params_saving_loading['path_to_saving'])
+            ->withHeader("x-api-key: $this->api_key")
+            ->returnResponseObject()
             ->post();
     }
 }
