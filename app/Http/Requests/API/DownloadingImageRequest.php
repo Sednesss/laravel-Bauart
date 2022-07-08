@@ -24,7 +24,8 @@ class DownloadingImageRequest extends FormRequest
     public function rules()
     {
         return [
-            'data' => ['required'],
+            'images_id' => ['required', 'array'],
+            'images_id.*' => ['required', 'integer'],
         ];
     }
 }
