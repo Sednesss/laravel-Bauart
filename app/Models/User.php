@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\ImageProcessing\Image;
+use App\Models\ImageProcessing\ImagesStack;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -46,5 +47,9 @@ class User extends Authenticatable
     public function images()
     {
         return $this->hasMany(Image::class);
+    }
+    public function images_stack()
+    {
+        return $this->hasMany(ImagesStack::class);
     }
 }

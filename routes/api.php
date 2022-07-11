@@ -25,4 +25,6 @@ Route::middleware('auth:api')->group(function () {
     Route::post('image/loading', 'App\Http\Controllers\API\LoadingImageController@loading')->name('image.loading');
     Route::post('image/downloading', 'App\Http\Controllers\API\DownloadingImageController@downloading')
         ->name('image.downloading');
+    Route::post('images_stack/downloading', 'App\Http\Controllers\API\DownloadingImagesStackController@downloading')
+        ->name('images_stack.downloading');
 });

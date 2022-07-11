@@ -21,4 +21,14 @@ return [
         ],
 
     ],
+
+    'OS_system' => [
+        'win' => [
+            'path_downloading_images' => storage_path('app\public')
+        ],
+
+        'linux' => [
+            'path_downloading_images' => storage_path('app/public')
+        ]
+    ]
 ];
