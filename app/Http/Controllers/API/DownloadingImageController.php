@@ -41,9 +41,7 @@ class DownloadingImageController extends Controller
                 $zip->setPath(config('imagestorage.OS_system.linux.path_downloading_images'));
             }
 
-            foreach ($image_list as $image) {
-                $zip->add($image->path_processed);
-            }
+            $zip->add($image_list->pluck('path_processed')->toArray());
             $zip->close();
             $path_archive = $zip->getFileObject()->getRealPath();
 

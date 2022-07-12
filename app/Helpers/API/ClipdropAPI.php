@@ -14,7 +14,7 @@ class ClipdropAPI implements ImageProcessingAPIInterface
         $this->api_key = $api_key;
     }
 
-    public function removeBackground($header_params, $body_params, $params_saving_loading)
+    public function removeBackground($body_params, $params_saving_loading, $header_params = [])
     {
         return Curl::to($this->url_remove_background)
             ->withFile('image_file', $params_saving_loading['path_to_loading'], 'image/png', $body_params['image_name'])

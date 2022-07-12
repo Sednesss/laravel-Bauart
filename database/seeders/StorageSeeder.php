@@ -18,12 +18,12 @@ class StorageSeeder extends Seeder
     {
         Storage::create([
             'name' => 'file',
-            'key' => 'file',
+            'key' => 'local',
         ]);
 
         Storage::create([
             'name' => 'yandex cloud',
-            'key' => 'yandex_cloud',
+            'key' => 's3',
         ]);
     }
 }

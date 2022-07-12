@@ -28,11 +28,9 @@ class LoadingImageController extends Controller
         $temp_images = $validated['images'];
         foreach ($temp_images as $key => $temp_image) {
             $image_name = $temp_image->getClientOriginalName();
-            if ($storage->key == 'yandex_cloud') {
-                $path_upload = $temp_image->store(config('imagestorage.disks.s3.use_path_style_endpoint'), 's3');
-            } else {
-                $path_upload = $temp_image->store(config('imagestorage.disks.local.storage_path_upload'), 'public');
-            }
+
+            $path_upload = $temp_image->store(config("imagestorage.disks.{$images_stack->key}.storage_path_upload"),
+                config("imagestorage.disks.{$images_stack->key}"));
 
             $input_image = [
                 'user_id' => $auth_user_id,
@@ -41,7 +39,7 @@ class LoadingImageController extends Controller
                 'name' => $image_name,
                 'path_origin' => $path_upload,
             ];
-            Image::create($input_image);
+            $image = Image::create($input_image);
 
             $images_name[] = ['image_name' => $image_name];
         }

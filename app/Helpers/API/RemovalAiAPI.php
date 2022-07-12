@@ -14,7 +14,7 @@ class RemovalAiAPI implements ImageProcessingAPIInterface
         $this->api_key = $api_key;
     }
 
-    public function removeBackground($header_params, $body_params, $params_saving_loading)
+    public function removeBackground($body_params, $params_saving_loading, $header_params = [])
     {
         return Curl::to($this->url_remove_background)
             ->withData(array('get_file' => $body_params['get_file']))

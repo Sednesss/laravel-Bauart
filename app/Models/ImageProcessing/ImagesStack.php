@@ -21,4 +21,9 @@ class ImagesStack extends Model
     {
         return $this->hasMany(Image::class);
     }
+
+    public function getPathImages()
+    {
+        return $this->images()->get()->pluck('path_processed')->toArray();
+    }
 }

@@ -46,19 +46,17 @@ class ImageProcessingJob implements ShouldQueue
 
             $clipdrop = new ClipdropAPI(config('imagesprocessing.api.clipdrop.api_key'));
             $response = $clipdrop->removeBackground(
-                [],
                 ['image_name' => $image->name],
                 ['path_to_loading' => $path_to_loading]);
 
 //            $remove_ai = new RemovalAiAPI(config('imagesprocessing.api.removalai.api_key'));
 //            $response = $remove_ai->removeBackground(
-//                [],
 //                ['image_name' => $image->name, 'get_file' => 1],
 //                ['path_to_loading' => $path_to_loading]);
 
             $image->path_processed = $path_processed;
             if ($response->status == 200 or $response->status == 0) {
-                $image->status = 'success';
+                $image->status = 'processed';
                 Storage::disk('public')->put($path_processed, $response->content);
             } else {
                 $image->status = 'failed: ' . $response->status;

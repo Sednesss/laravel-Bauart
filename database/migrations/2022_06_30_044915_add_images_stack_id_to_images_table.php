@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigInteger('images_stack_id')->unsigned()->after('storage_id');
             $table->foreign('images_stack_id')->references('id')->on('images_stacks');
 
-            $table->string('status')->nullable(true)->after('name');
+            $table->string('status')->nullable(true)->after('name')->default('uploading');
         });
     }
 
