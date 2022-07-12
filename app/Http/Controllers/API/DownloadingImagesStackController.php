@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\DownloadingImagesStackRequest;
+use App\Http\Resources\API\ErrorResource;
 use App\Models\ImageProcessing\ImagesStack;
 use ZanySoft\Zip\Zip;
 
@@ -11,34 +12,41 @@ class DownloadingImagesStackController extends Controller
 {
     public function downloading(DownloadingImagesStackRequest $request)
     {
-        $request->validated();
+        $validated = $request->validated();
 
-        $images_stack_id = $request['images_stack_id'];
+        $images_stack_id = $validated['images_stack_id'];
+        $auth_user_id = $request->user()->id;
 
-        $zip_file_name = date('Y_m_d_His') . '_images_' . $request->user()->id . '.zip';
-        $zip = Zip::create($zip_file_name);
+        $image_stack = ImagesStack::find($images_stack_id);
+        if ($image_stack) {
+            if ($image_stack->user->id == $auth_user_id) {
 
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            $zip->setPath(config('imagestorage.OS_system.win.path_downloading_images'));
+                $zip_file_name = date('Y_m_d_His') . '_images_' . $auth_user_id . '.zip';
+                $zip = Zip::create($zip_file_name);
+
+                if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                    $zip->setPath(config('imagestorage.OS_system.win.path_downloading_images'));
+                } else {
+                    $zip->setPath(config('imagestorage.OS_system.linux.path_downloading_images'));
+                }
+
+                $image_list = $image_stack->images;
+                foreach ($image_list as $image) {
+                    $zip->add($image->path_processed);
+                }
+                $zip->close();
+                $path_archive = $zip->getFileObject()->getRealPath();
+
+                return response()->download($path_archive);
+            } else {
+                $error['error'] = ['Error loading images.'];
+                $error['message'] = 'The transferred stack of images does not belong to the user.';
+                return new ErrorResource($error);
+            }
         } else {
-            $zip->setPath(config('imagestorage.OS_system.linux.path_downloading_images'));
+            $error['error'] = ['Error loading images.'];
+            $error['message'] = 'The transferred stack of images was not found.';
+            return new ErrorResource($error);
         }
-
-//        $is_users_stack = $request->user()->images_stack
-//            ->where('id', '=', $images_stack_id);
-
-//        $error['error'] = ['Error loading images.'];
-//        $error['message'] = 'The transmitted image does not belong to the user.';
-//        return new ErrorResource($error);
-
-        $image_list = ImagesStack::find($images_stack_id)->images;
-
-        foreach ($image_list as $image) {
-            $zip->add($image->path_processed);
-        }
-        $zip->close();
-        $path_archive = $zip->getFileObject()->getRealPath();
-
-        return response()->download($path_archive);
     }
 }

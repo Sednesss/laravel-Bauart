@@ -13,22 +13,23 @@ class LoadingImageController extends Controller
 {
     public function loading(LoadingImageRequest $request)
     {
-        $request->validated();
+        $validated = $request->validated();
 
+        $auth_user_id = $request->user()->id;
         $input_image_stack = [
-            'user_id' => $request->user()->id
+            'user_id' => $auth_user_id
         ];
         $images_stack = ImagesStack::create($input_image_stack);
 
         $images_name = [];
 
-        $temp_images = $request['images'];
+        $temp_images = $validated['images'];
         foreach ($temp_images as $key => $temp_image) {
             $image_name = $temp_image->getClientOriginalName();
             $path_upload = $temp_image->store(config('imagestorage.disks.local.storage_path_upload'), 'public');
 
             $input_image = [
-                'user_id' => $request->user()->id,
+                'user_id' => $auth_user_id,
                 'storage_id' => 1,
                 'images_stack_id' => $images_stack->id,
                 'name' => $image_name,

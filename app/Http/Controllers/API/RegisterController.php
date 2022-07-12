@@ -18,17 +18,15 @@ class RegisterController extends Controller
      */
     public function register(RegisterRequest $request)
     {
-        $request->validated();
+        $validated = $request->validated();
 
-        $credentials = $request->only('email', 'password');
-
-        if (Auth::validate($credentials)) {
+        if (Auth::validate($validated)) {
             $error['error'] = ['The user with this email is already registered'];
             $error['message'] = 'Registration error.';
             return new ErrorResource($error);
         }
 
-        $input = $request->all();
+        $input = $validated;
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
 

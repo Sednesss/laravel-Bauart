@@ -9,6 +9,8 @@ class Storage extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name', 'key'];
+
     public function images()
     {
         return $this->hasMany(Image::class);

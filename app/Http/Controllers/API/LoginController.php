@@ -16,11 +16,9 @@ class LoginController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        $request->validated();
-
-        $credentials = $request->only('email', 'password');
-
-        if (Auth::attempt($credentials)) {
+        $validated = $request->validated();
+        
+        if (Auth::attempt($validated)) {
             $user = Auth::user();
             $success['email'] = $user->email;
             $success['token'] = $user->createToken('MyApp')->accessToken;
