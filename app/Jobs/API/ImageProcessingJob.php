@@ -41,8 +41,8 @@ class ImageProcessingJob implements ShouldQueue
         $success_processing_stack = true;
         foreach (Image::where('images_stack_id', $this->images_stack_id)->cursor() as $image) {
             $path_to_loading = storage_path('app\public') . '/'
-                . config('imagestorage.disks.local.storage_path_upload') . '/' . basename($image->path_origin);
-            $path_processed = config('imagestorage.disks.local.storage_path_processed') . '/' . basename($image->path_origin);
+                . config('imagestorage.disks.public.storage_path_upload') . '/' . basename($image->path_origin);
+            $path_processed = config('imagestorage.disks.public.storage_path_processed') . '/' . basename($image->path_origin);
 
             $clipdrop = new ClipdropAPI(config('imagesprocessing.api.clipdrop.api_key'));
             $response = $clipdrop->removeBackground(

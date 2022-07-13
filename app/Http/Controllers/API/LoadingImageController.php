@@ -28,9 +28,8 @@ class LoadingImageController extends Controller
         $temp_images = $validated['images'];
         foreach ($temp_images as $key => $temp_image) {
             $image_name = $temp_image->getClientOriginalName();
-
-            $path_upload = $temp_image->store(config("imagestorage.disks.{$images_stack->key}.storage_path_upload"),
-                config("imagestorage.disks.{$images_stack->key}"));
+            $path_upload = $temp_image->store(config("imagestorage.disks.{$storage->key}.storage_path_upload"),
+                $storage->key);
 
             $input_image = [
                 'user_id' => $auth_user_id,

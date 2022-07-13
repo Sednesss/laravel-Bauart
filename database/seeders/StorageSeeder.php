@@ -18,7 +18,7 @@ class StorageSeeder extends Seeder
     {
         Storage::create([
             'name' => 'file',
-            'key' => 'local',
+            'key' => 'public',
         ]);
 
         Storage::create([
