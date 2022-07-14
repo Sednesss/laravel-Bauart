@@ -135,7 +135,7 @@ Name            | Value
 
 Name            | Type | Description | Example
 ----------------|------|------------ |--------
-**images[]**| _array_ [_file_] | Images to be processed| `"file1.png, file2.png"`
+**images[]**| _array_(_file_) | Images to be processed| `[file1.png, file2.png]`
 
 ##### cURL Example
 ```bash
@@ -154,6 +154,48 @@ Success
         "images": [
             "file1.png",
             "file2.png"
+        ]
+    }
+}
+```
+
+# Downloading images
+This endpoint downloading selected processed images.
+
+#### Header
+
+Name            | Value 
+----------------|------
+**Authorization**| {{token}} 
+    
+#### Attributes
+
+Name            | Type | Description | Example
+----------------|------|------------ |--------
+**images_id[]**| _array_(_file_) | Images to be processed| `[1, 2]`
+
+##### cURL Example
+```bash
+$ curl -X POST {{url}}/api/image/downloading \
+-H "Authorization: {{token}}" \
+-d '{"images_id[0]": 1, "images_id[1]": 2}'
+```
+
+##### Response Example
+Success    
+```bash
+{
+    "Content-Type": application/zip
+}
+```
+Faild    
+```bash
+{
+    "data": {
+        "success": false,
+        "message": "The transmitted image was not found.",
+        "error": [
+            "Error loading images."
         ]
     }
 }
