@@ -42,6 +42,7 @@ $ curl -X POST {{url}}/api/register \
 ```
 
 ##### Response Example
+Success    
 ```bash
 {
     "data": {
@@ -55,7 +56,7 @@ $ curl -X POST {{url}}/api/register \
     }
 }
 ```
-    
+Faild
 ```bash
 {
     "data": {
@@ -66,4 +67,13 @@ $ curl -X POST {{url}}/api/register \
         ]
     }
 }
+```
+```bash
+{
+    "message": "The email must be a valid email address.",
+    "errors": {
+        "email": [
+            "The email must be a valid email address."
+        ]
+    }
 ```
