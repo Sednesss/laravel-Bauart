@@ -5,7 +5,7 @@
  - 2.1. Загрузить изображение для обработки
  - 2.2. Скачать обработанное изображение
 
-# Routes
+# Endpoints
 Name | Description
 ------------ | ------------
 [Register]({{url}}/api/register)     | New User Registration
