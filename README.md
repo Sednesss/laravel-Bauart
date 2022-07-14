@@ -1,11 +1,12 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p
 
 # Сервис для обработки изображений
-    1. Регистрация\Авторизация в системе
-    2. Авторизированный пользователь может:
-        2.1. Загрузить изображение для обработки
-        2.2. Скачать обработанное изображение
-    
+## 1. Регистрация\Авторизация в системе
+## 2. Авторизированный пользователь может:
+##    2.1. Загрузить изображение для обработки
+##    2.2. Скачать обработанное изображение
+
+# Routes
 Name | Description
 ------------ | ------------
 [Register]({{url}}/api/register)     | New User Registration
