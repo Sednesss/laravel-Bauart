@@ -14,7 +14,7 @@ Name | Description
 [Images downloading](https://64robots.com)   | Downloading selected processed images
 [Stack images downloading](https://cubettech.com) | Downloading processed images from the selected stack (the stack is formed when accessing [Images downloading](https://64robots.com))
     
-#Register
+# Register
 This endpoint creates registers a new user in the system.
 
 #### Header
