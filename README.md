@@ -10,9 +10,9 @@ Name | Description
 ------------ | ------------
 [Register]({{url}}/api/register)     | New User Registration
 [Login]({{url}}/api/login)   | User authorization
-[Images uploading](https://kirschbaumdevelopment.com)   | Uploading images to a service for further processing
-[Images downloading](https://64robots.com)   | Downloading selected processed images
-[Stack images downloading](https://cubettech.com) | Downloading processed images from the selected stack (the stack is formed when accessing [Images downloading](https://64robots.com))
+[Images uploading]({{url}}/api/image/loading)   | Uploading images to a service for further processing
+[Images downloading]({{url}}/api/image/downloading)   | Downloading selected processed images
+[Stack images downloading]({{url}}/api/images_stack/downloading) | Downloading processed images from the selected stack (the stack is formed when accessing [Images downloading]({{url}}/api/image/loading)
     
 # Register
 This endpoint creates registers a new user in the system.
@@ -172,7 +172,7 @@ Name            | Value
 
 Name            | Type | Description | Example
 ----------------|------|------------ |--------
-**images_id[]**| _array_(_file_) | Images to be processed| `[1, 2]`
+**images_id[]**| _array_(_file_) | ID images to be processed| `[1, 2]`
 
 ##### cURL Example
 ```bash
@@ -194,6 +194,48 @@ Faild
     "data": {
         "success": false,
         "message": "The transmitted image was not found.",
+        "error": [
+            "Error loading images."
+        ]
+    }
+}
+```
+
+# Downloading stack images
+Downloading processed images from the selected stack (the stack is formed when accessing [Images downloading]({{url}}/api/image/loading).
+
+#### Header
+
+Name            | Value 
+----------------|------
+**Authorization**| {{token}} 
+    
+#### Attributes
+
+Name            | Type | Description | Example
+----------------|------|------------ |--------
+**images_stack_id[]**| _integer_ | ID stack images| `1`
+
+##### cURL Example
+```bash
+$ curl -X POST {{url}}/api/image/downloading \
+-H "Authorization: {{token}}" \
+-d '{"images_stack_id": 1}'
+```
+
+##### Response Example
+Success    
+```bash
+{
+    "Content-Type": application/zip
+}
+```
+Faild    
+```bash
+{
+    "data": {
+        "success": false,
+        "message": "The transferred stack of images was not found.",
         "error": [
             "Error loading images."
         ]
