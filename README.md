@@ -1,12 +1,11 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p
 
-## Routes
-- **[Register]({{url}}/api/register)**
-- **[Login]({{url}}/api/login)**
-- **[Images uploading](https://kirschbaumdevelopment.com)**
-- **[Images downloading](https://64robots.com)**
-- **[Stack images downloading](https://cubettech.com)**
-
+## Сервис для обработки изображений
+    1. Регистрация\Авторизация в системе
+    2. Авторизированный пользователь может:
+        1. Загрузить изображение для обработки
+        2. Скачать обработанное изображение
+    
 Name | Description
 ------------ | ------------
 [Register]({{url}}/api/register)     | New User Registration
