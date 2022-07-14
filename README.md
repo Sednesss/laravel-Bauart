@@ -172,7 +172,7 @@ Name            | Value
 
 Name            | Type | Description | Example
 ----------------|------|------------ |--------
-**images_id[]**| _array_(_file_) | ID images to be processed| `[1, 2]`
+**images_id[]**| _array_(_integer_) | ID images to be processed| `[1, 2]`
 
 ##### cURL Example
 ```bash
