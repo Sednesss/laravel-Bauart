@@ -55,3 +55,15 @@ $ curl -X POST {{url}}/api/register \
     }
 }
 ```
+    
+```bash
+{
+    "data": {
+        "success": false,
+        "message": "Registration error.",
+        "error": [
+            "The user with this email is already registered"
+        ]
+    }
+}
+```
