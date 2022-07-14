@@ -68,12 +68,56 @@ Faild
     }
 }
 ```
+
+# Login
+This endpoint authenticates a new user to the system.
+
+#### Header
+
+Name            | Value 
+----------------|------
+**Content-Type**| application/json 
+**Accept**| application/json 
+    
+#### Attributes
+
+Name            | Type | Description | Example
+----------------|------|------------ |--------
+**email**| _email_ | Email new user| `"user1@mail.ru"`
+**password**| _password_ | Password new user| `"1234"`
+
+##### cURL Example
+```bash
+$ curl -X POST {{url}}/api/register \
+-H "Content-Type: application/json" \
+-H "Accept: application/json" \
+-d '{"email": "user1@mail.ru", "password": 1111}'
+```
+
+##### Response Example
+Success    
 ```bash
 {
-    "message": "The email must be a valid email address.",
-    "errors": {
-        "email": [
-            "The email must be a valid email address."
+    "data": {
+        "success": true,
+        "message": "User authenticate successfully.",
+        "user": {
+            "email": "user1@mail.ru",
+            "token-type": "Bearer",
+            "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NmM0YWZhZi0xODFiLTRmYmYtYTc5NC0wOTUyMjNkN2NkNjUiLCJqdGkiOiIyZGE2YzQ5OTVjNTIzNTZkYWNmZmQ2YjM0Mzk0MTRiMTdiOTIzZTNiMzFkY2M4MzQ3YzhlZDlhOTQyMmFlZjFlZDY5MDRkNWJmYjYwOWJiOSIsImlhdCI6MTY1Nzc3NzkwOC41MzQ4MzQsIm5iZiI6MTY1Nzc3NzkwOC41MzQ4MzUsImV4cCI6MTY4OTMxMzkwOC41Mjk4NTgsInN1YiI6IjEiLCJzY29wZXMiOltdfQ.FFWMJ1U5cMJEI_owLM--FgXmV8MOwKUWEEfKcGSapIxErOqLO61Ts6nXviEEtHe1R3SM1WRdJg17FE72JBxrQurZNlu5VdkaArBiykgfFuRj_d9QpW9BMMfWWSo6n1ceeOt4fBrvNzB0rMM5fEntm42Nbhdg97Q_2Eq1WexuLaTTSok45XrdJPZB8-2-NRqaevZLWW1C26yltJ8coeuW2HKQUQOwBAEHG2X2vDwdODYVCB9rzpODpLqZhwrhaIpx5pqgs5VIfpOnFIgdGIxk5uz9P1utG8z-Zej1DCsV61S5VPx9Ov9elyYkki_IsmRr-W9FjE7KfbsWBiH5TIBKKAih-DKEETtPKfclaOspwMmiSK3z25x2K06TUYCsCNobJKkQjMeDYj5Ot8N62og9cdQgtJf65nmbxSpqPTYc3DnPve9Xn7pejDRIsDQSTLZ-V6n_nD2eUZ0Dx9cxT6yxcJ1-jB3_OjZO_GS4lCqFFnyCF7i0HmO02UZnTX9oW8oj28rX6q_yexwMmct9TzHulQy-KcXRMzGduYxTyhnAfReza6rtdNwaWQhPEpmrg3G7K3Nk9Ebn0qlr_6RorGs2ye6cu8zRa1AZZsQrQjVtzd1dBk0mCR6xksmUY2vgcLmYeF8hwhQv1AB5dkbsbcFE2Vv-F0f9c9om7dA3NqVK7pc"
+        }
+    }
+}
+```
+Faild
+```bash
+{
+    "data": {
+        "success": false,
+        "message": "Authenticate Error.",
+        "error": [
+            "Invalid authorization data."
         ]
     }
+}
 ```
