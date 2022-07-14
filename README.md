@@ -83,12 +83,12 @@ Name            | Value
 
 Name            | Type | Description | Example
 ----------------|------|------------ |--------
-**email**| _email_ | Email new user| `"user1@mail.ru"`
-**password**| _password_ | Password new user| `"1234"`
+**email**| _email_ | Email user| `"user1@mail.ru"`
+**password**| _password_ | Password user| `"1234"`
 
 ##### cURL Example
 ```bash
-$ curl -X POST {{url}}/api/register \
+$ curl -X POST {{url}}/api/login \
 -H "Content-Type: application/json" \
 -H "Accept: application/json" \
 -d '{"email": "user1@mail.ru", "password": 1111}'
@@ -117,6 +117,43 @@ Faild
         "message": "Authenticate Error.",
         "error": [
             "Invalid authorization data."
+        ]
+    }
+}
+```
+
+# Uploading images
+This endpoint uploads images to the service for further processing.
+
+#### Header
+
+Name            | Value 
+----------------|------
+**Authorization**| {{token}} 
+    
+#### Attributes
+
+Name            | Type | Description | Example
+----------------|------|------------ |--------
+**images[]**| _array_ [_file_] | Images to be processed| `"file1.png, file2.png"`
+
+##### cURL Example
+```bash
+$ curl -X POST {{url}}/api/image/loading \
+-H "Authorization: {{token}}" \
+-d '{"images[0]": "file1.png", "images[0]": file2.png"}'
+```
+
+##### Response Example
+Success    
+```bash
+{
+    "data": {
+        "success": true,
+        "message": "Images loading successfully.",
+        "images": [
+            "file1.png",
+            "file2.png"
         ]
     }
 }
